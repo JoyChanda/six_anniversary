@@ -20,7 +20,9 @@ function initStarsIntro(onContinue) {
     allArrived = false,
     doneTimer = 0;
   let canContinue = false;
+  let dismissed = false;
   let rafId = null;
+  let skipTimer = null;
 
   function resize() {
     W = canvas.width = window.innerWidth;
@@ -316,7 +318,7 @@ function initStarsIntro(onContinue) {
         doneTimer++;
         spawnPetals();
       }
-      if (allArrived && doneTimer > 120) enableContinue();
+      if (allArrived && doneTimer > 45) enableContinue();
     }
   }
 
@@ -340,22 +342,34 @@ function initStarsIntro(onContinue) {
   }
 
   function dismiss() {
-    if (!canContinue) return;
+    if (!canContinue || dismissed) return;
+    dismissed = true;
+    if (skipTimer) clearTimeout(skipTimer);
     cancelAnimationFrame(rafId);
     root.style.pointerEvents = "none";
     root.classList.remove("can-continue");
     clickHint.classList.remove("show");
 
-    gsap.to(root, {
-      opacity: 0,
-      duration: 0.7,
-      onComplete: () => {
-        root.classList.add("overlay-hidden");
-        root.setAttribute("aria-hidden", "true");
-        document.body.style.overflow = "";
-        if (typeof onContinue === "function") onContinue();
-      },
-    });
+    const finish = () => {
+      root.classList.add("overlay-hidden");
+      root.setAttribute("aria-hidden", "true");
+      if (root.parentNode) root.remove();
+      document.body.style.overflow = "";
+      if (typeof onContinue === "function") onContinue();
+    };
+
+    if (typeof gsap !== "undefined") {
+      gsap.to(root, { opacity: 0, duration: 0.7, onComplete: finish });
+    } else {
+      root.style.transition = "opacity 0.7s ease";
+      root.style.opacity = "0";
+      setTimeout(finish, 700);
+    }
+  }
+
+  function handleIntroClick() {
+    if (!canContinue) return;
+    dismiss();
   }
 
   resize();
@@ -371,5 +385,14 @@ function initStarsIntro(onContinue) {
   resetRun();
   loop();
 
-  root.addEventListener("click", dismiss, { once: true });
+  skipTimer = setTimeout(enableContinue, 7000);
+  root.addEventListener("click", handleIntroClick);
+  document.addEventListener("keydown", function introKey(e) {
+    if (!canContinue || dismissed) return;
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      dismiss();
+      document.removeEventListener("keydown", introKey);
+    }
+  });
 }

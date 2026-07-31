@@ -1,3 +1,25 @@
+/* ---------------- helpers ---------------- */
+function fadeOut(el, onDone){
+  if(typeof gsap !== 'undefined'){
+    gsap.to(el, { opacity: 0, duration: 0.7, onComplete: onDone });
+    return;
+  }
+  el.style.transition = 'opacity 0.7s ease';
+  el.style.opacity = '0';
+  setTimeout(onDone, 700);
+}
+
+function pulseScale(el, from, to, duration){
+  if(typeof gsap !== 'undefined'){
+    gsap.fromTo(el, { scale: from }, { scale: to, duration });
+    return;
+  }
+  el.style.transform = `scale(${from})`;
+  el.offsetHeight;
+  el.style.transition = `transform ${duration}s ease`;
+  el.style.transform = `scale(${to})`;
+}
+
 /* ---------------- custom cursor + trail ---------------- */
 const cursor = document.getElementById('cursor');
 document.addEventListener('mousemove', e=>{
@@ -9,7 +31,11 @@ document.addEventListener('mousemove', e=>{
     t.style.left = e.clientX+'px';
     t.style.top = e.clientY+'px';
     document.body.appendChild(t);
-    gsap.to(t,{opacity:0, scale:0, duration:.6, onComplete:()=>t.remove()});
+    if(typeof gsap !== 'undefined'){
+      gsap.to(t,{opacity:0, scale:0, duration:.6, onComplete:()=>t.remove()});
+    } else {
+      setTimeout(()=>t.remove(), 600);
+    }
   }
 });
 
@@ -17,6 +43,7 @@ document.addEventListener('mousemove', e=>{
 const loading = document.getElementById('loading');
 const bar = document.getElementById('loadbarfill');
 const pct = document.getElementById('loadpct');
+let loadingHidden = false;
 
 for(let i=0;i<24;i++){
   const p = document.createElement('div');
@@ -26,7 +53,9 @@ for(let i=0;i<24;i++){
   p.style.left = Math.random()*100+'vw';
   p.style.top = Math.random()*100+'vh';
   loading.appendChild(p);
-  gsap.to(p,{y:'-=40', opacity:0, duration:2+Math.random()*2, repeat:-1, delay:Math.random()*2, ease:'sine.inOut'});
+  if(typeof gsap !== 'undefined'){
+    gsap.to(p,{y:'-=40', opacity:0, duration:2+Math.random()*2, repeat:-1, delay:Math.random()*2, ease:'sine.inOut'});
+  }
 }
 
 let progress = 0;
@@ -44,29 +73,46 @@ const loadInterval = setInterval(()=>{
 }, 280);
 
 function hideLoading(){
+  if(loadingHidden) return;
+  loadingHidden = true;
+
   loading.style.pointerEvents = 'none';
   loading.style.opacity = '0';
-  gsap.killTweensOf(loading.querySelectorAll('.particle'));
+
+  if(typeof gsap !== 'undefined'){
+    gsap.killTweensOf(loading.querySelectorAll('.particle'));
+  }
+
   setTimeout(()=>{
     loading.classList.add('overlay-hidden');
     loading.setAttribute('aria-hidden', 'true');
-    loading.remove();
+    if(loading.parentNode) loading.remove();
     startStarsIntro();
   }, 820);
 }
+
+loading.addEventListener('click', ()=>{
+  if(progress >= 100) hideLoading();
+});
 
 /* ---------------- stars intro -> reveal rest ---------------- */
 const rest = document.getElementById('restOfPage');
 
 function startStarsIntro(){
-  initStarsIntro(()=>{
-    rest.style.display = 'block';
-    rest.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = '';
-    document.body.classList.add('main-ready');
-    initAfterReveal();
-    window.scrollTo({top:0});
-  });
+  if(typeof initStarsIntro !== 'function'){
+    showMainContent();
+    return;
+  }
+  initStarsIntro(showMainContent);
+}
+
+function showMainContent(){
+  rest.style.display = 'block';
+  rest.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = '';
+  document.body.classList.add('main-ready');
+  initAfterReveal();
+  window.scrollTo({top:0});
 }
 
 /* ---------------- scroll reveal (AOS-lite) ---------------- */
@@ -243,7 +289,7 @@ function initTheme(){
 
   function applyTheme(theme){
     html.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
+    try { localStorage.setItem('theme', theme); } catch (_) {}
     const isDark = theme === 'dark';
     icon.textContent = isDark ? '☀️' : '🌙';
     label.textContent = isDark ? 'Light' : 'Dark';
@@ -309,7 +355,7 @@ function initEasterEgg(){
     e.stopPropagation();
 
     count++;
-    gsap.fromTo(heart, { scale: 1.35 }, { scale: 1, duration: 0.25 });
+    pulseScale(heart, 1.35, 1, 0.25);
 
     if(count < 5) return;
 
