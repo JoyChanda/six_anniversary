@@ -1,183 +1,276 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="bn">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>6 Months of Us ❤️</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>6 Months of Us ❤️</title>
 
-<script>
-  (function(){
-    const saved = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
-  })();
-</script>
+    <script>
+      (function () {
+        const saved = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)",
+        ).matches;
+        document.documentElement.setAttribute(
+          "data-theme",
+          saved || (prefersDark ? "dark" : "light"),
+        );
+      })();
+    </script>
 
-<!-- Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=Marck+Script&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=Marck+Script&family=Jost:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
 
-<!-- Libraries -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.16/typed.umd.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.9.2/confetti.browser.min.js"></script>
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.16/typed.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.9.2/confetti.browser.min.js"></script>
 
-<link rel="stylesheet" href="anniversary.css">
-</head>
-<body>
+    <link rel="stylesheet" href="anniversary.css" />
+  </head>
+  <body>
+    <!-- custom cursor -->
+    <div id="cursor">❤️</div>
 
-<!-- custom cursor -->
-<div id="cursor">❤️</div>
-
-<!-- loading -->
-<div id="loading">
-  <div class="beat">❤️</div>
-  <p>Loading Memories...</p>
-  <div id="loadbar"><span id="loadbarfill"></span></div>
-  <div id="loadpct">0%</div>
-</div>
-
-<!-- music + theme toggles -->
-<div class="top-controls">
-  <button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle theme">
-    <span class="theme-icon" id="themeIcon">☀️</span>
-    <span id="themeLabel">Light</span>
-  </button>
-  <button class="music-btn" id="musicBtn" type="button" title="Ed Sheeran - Perfect">▶ &nbsp;Play Our Song</button>
-</div>
-<audio id="bgm" loop preload="auto">
-  <source src="Ed Sheeran - Perfect.mp3" type="audio/mpeg">
-</audio>
-
-<!-- hidden easter egg heart -->
-<div class="heart-fixed" id="secretHeart">❤️</div>
-<div class="easter" id="easterMsg">You're my forever ❤️</div>
-
-<!-- Scene 1: Welcome -->
-<section class="scene" id="welcome">
-  <div class="eyebrow">6 Months of Us</div>
-  <h1 class="display">Hi My Love ❤️</h1>
-  <p>I made something for you...</p>
-  <div class="click-hint" id="clickHint">Click Anywhere</div>
-</section>
-
-<div id="restOfPage" style="display:none;">
-
-  <!-- Scene 2: Timeline -->
-  <section class="scene" id="timeline">
-    <div class="card" data-aos>
-      <div class="eyebrow">Where it started</div>
-      <div class="date">06 February 2026</div>
-      <div class="sub">The day our journey began...</div>
-      <div class="heart-icon">❤️</div>
+    <!-- loading -->
+    <div id="loading">
+      <div class="beat">❤️</div>
+      <p>Loading Memories...</p>
+      <div id="loadbar"><span id="loadbarfill"></span></div>
+      <div id="loadpct">0%</div>
     </div>
-  </section>
 
-  <!-- Scene 3: Floating Memories -->
-  <section class="scene" id="memories">
-    <div class="eyebrow" data-aos>Little Moments</div>
-    <div class="mem-wrap" id="memWrap"></div>
-  </section>
+    <!-- music + theme toggles -->
+    <div class="top-controls">
+      <button
+        class="theme-btn"
+        id="themeBtn"
+        type="button"
+        aria-label="Toggle theme"
+      >
+        <span class="theme-icon" id="themeIcon">☀️</span>
+        <span id="themeLabel">Light</span>
+      </button>
+      <button
+        class="music-btn"
+        id="musicBtn"
+        type="button"
+        title="Ed Sheeran - Perfect"
+      >
+        ▶ &nbsp;Play Our Song
+      </button>
+    </div>
+    <audio id="bgm" loop preload="auto">
+      <source src="Ed Sheeran - Perfect.mp3" type="audio/mpeg" />
+    </audio>
 
-  <!-- Scene 4: Gallery -->
-  <section class="scene" id="gallery">
-    <div class="eyebrow" data-aos>Our Little Museum</div>
-    <h2 class="display" data-aos style="font-size:clamp(26px,4vw,40px);margin-bottom:36px;">Moments Worth Framing</h2>
-    <div class="gallery" data-aos>
-      <div class="polaroid" style="--r:-6deg">
-        <div class="frame" style="background:linear-gradient(135deg,#FF4D6D,#7a1030)">😊</div>
-        <div class="cap">first smile</div>
+    <!-- hidden easter egg heart -->
+    <button
+      type="button"
+      class="heart-fixed"
+      id="secretHeart"
+      aria-label="Secret heart"
+    >
+      ❤️
+    </button>
+    <div class="easter" id="easterMsg">You're my forever ❤️</div>
+
+    <!-- Scene 1: Stars intro (after loading) -->
+    <section id="starsIntro" aria-label="6 Months of Us intro">
+      <div id="starsScene">
+        <canvas id="starsCanvas"></canvas>
+        <div id="starsOverlay"><div id="starsTagline"></div></div>
       </div>
-      <div class="polaroid" style="--r:4deg">
-        <div class="frame" style="background:linear-gradient(135deg,#FFD166,#a8641c)">☎️</div>
-        <div class="cap">first call</div>
+      <div class="stars-click-hint" id="starsClickHint">Click Anywhere</div>
+    </section>
+
+    <div id="restOfPage" style="display: none" aria-hidden="true">
+      <!-- Scene 2: Timeline -->
+      <section class="scene" id="timeline">
+        <div class="card" data-aos>
+          <div class="eyebrow">Where it started</div>
+          <div class="date">06 February 2026</div>
+          <div class="sub">The day our journey began...</div>
+          <div class="heart-icon">❤️</div>
+        </div>
+      </section>
+
+      <!-- Scene 3: Floating Memories -->
+      <section class="scene" id="memories">
+        <div class="eyebrow" data-aos>Little Moments</div>
+        <div class="mem-wrap" id="memWrap"></div>
+      </section>
+
+      <!-- Scene 4: Gallery -->
+      <section class="scene" id="gallery">
+        <div class="eyebrow" data-aos>Our Little Museum</div>
+        <h2
+          class="display"
+          data-aos
+          style="font-size: clamp(26px, 4vw, 40px); margin-bottom: 36px"
+        >
+          Moments Worth Framing
+        </h2>
+        <div class="gallery" data-aos>
+          <div class="polaroid" style="--r: -6deg">
+            <div
+              class="frame"
+              style="background: linear-gradient(135deg, #ff4d6d, #7a1030)"
+            >
+              😊
+            </div>
+            <div class="cap">first smile</div>
+          </div>
+          <div class="polaroid" style="--r: 4deg">
+            <div
+              class="frame"
+              style="background: linear-gradient(135deg, #ffd166, #a8641c)"
+            >
+              ☎️
+            </div>
+            <div class="cap">first call</div>
+          </div>
+          <div class="polaroid" style="--r: -3deg">
+            <div
+              class="frame"
+              style="background: linear-gradient(135deg, #4d7dff, #1a2a6b)"
+            >
+              😂
+            </div>
+            <div class="cap">first fight</div>
+          </div>
+          <div class="polaroid" style="--r: 5deg">
+            <div
+              class="frame"
+              style="background: linear-gradient(135deg, #8e4dff, #2c1a6b)"
+            >
+              🌙
+            </div>
+            <div class="cap">late night talks</div>
+          </div>
+          <div class="polaroid" style="--r: -5deg">
+            <div
+              class="frame"
+              style="background: linear-gradient(135deg, #ff4d9e, #6b1a3f)"
+            >
+              ✈️
+            </div>
+            <div class="cap">little adventures</div>
+          </div>
+          <div class="polaroid" style="--r: 3deg">
+            <div
+              class="frame"
+              style="background: linear-gradient(135deg, #4dffb8, #1a6b4a)"
+            >
+              ❤️
+            </div>
+            <div class="cap">still together</div>
+          </div>
+        </div>
+        <p
+          style="
+            margin-top: 18px;
+            font-size: 11px;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+          "
+          data-aos
+        >
+          tap a photo to zoom · swap in your real pictures anytime
+        </p>
+      </section>
+
+      <!-- lightbox -->
+      <div class="lightbox" id="lightbox">
+        <div class="polaroid" id="lightboxContent"></div>
       </div>
-      <div class="polaroid" style="--r:-3deg">
-        <div class="frame" style="background:linear-gradient(135deg,#4d7dff,#1a2a6b)">😂</div>
-        <div class="cap">first fight</div>
-      </div>
-      <div class="polaroid" style="--r:5deg">
-        <div class="frame" style="background:linear-gradient(135deg,#8e4dff,#2c1a6b)">🌙</div>
-        <div class="cap">late night talks</div>
-      </div>
-      <div class="polaroid" style="--r:-5deg">
-        <div class="frame" style="background:linear-gradient(135deg,#ff4d9e,#6b1a3f)">✈️</div>
-        <div class="cap">little adventures</div>
-      </div>
-      <div class="polaroid" style="--r:3deg">
-        <div class="frame" style="background:linear-gradient(135deg,#4dffb8,#1a6b4a)">❤️</div>
-        <div class="cap">still together</div>
-      </div>
+
+      <!-- Scene 5: Counter -->
+      <section class="scene" id="counter">
+        <div class="eyebrow" data-aos>Every Second Counted</div>
+        <h2 class="display" data-aos style="font-size: clamp(26px, 4vw, 40px)">
+          We've been together
+        </h2>
+        <div class="counter-grid" data-aos>
+          <div class="counter-box">
+            <div class="num" id="cMonths">0</div>
+            <div class="lbl">Months</div>
+          </div>
+          <div class="counter-box">
+            <div class="num" id="cDays">0</div>
+            <div class="lbl">Days</div>
+          </div>
+          <div class="counter-box">
+            <div class="num" id="cHours">0</div>
+            <div class="lbl">Hours</div>
+          </div>
+          <div class="counter-box">
+            <div class="num" id="cMinutes">0</div>
+            <div class="lbl">Minutes</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Scene 6: Promise -->
+      <section class="scene" id="promise">
+        <div class="card" data-aos>
+          <div class="eyebrow">A Small Promise</div>
+          <p class="typed-line"><span id="typedTarget"></span></p>
+        </div>
+      </section>
+
+      <!-- Scene 7: Gift -->
+      <section class="scene" id="gift">
+        <div class="eyebrow" data-aos>One More Thing</div>
+        <div id="giftbox-wrap" data-aos>
+          <div class="gift shake" id="giftEmoji">🎁</div>
+          <div class="gift-hint">tap to open</div>
+        </div>
+      </section>
+
+      <!-- Scene 8: Letter -->
+      <section class="scene" id="letter">
+        <div class="eyebrow" data-aos>For Your Eyes Only</div>
+        <div class="envelope" id="envelope" data-aos>
+          <div class="seal">💌</div>
+        </div>
+        <div class="letter-paper" id="letterPaper">
+          Dear Love'Bosu',<br /><br />
+          Thank you for every smile you gave me on ordinary days.<br />
+          Thank you for every hug that made bad days smaller.<br />
+          Thank you for every moment, big or small, that turned into a memory I
+          keep.<br /><br />
+          Here's to six months, and to every month after this one.<br />
+          <span class="sign">Always yours❤️</span>
+        </div>
+      </section>
+
+      <!-- Scene 9: Sky -->
+      <section class="scene" id="sky">
+        <div class="moon" data-aos></div>
+        <p
+          class="script"
+          style="font-size: 28px; color: var(--accent)"
+          data-aos
+        >
+          under the same sky, always
+        </p>
+      </section>
+
+      <!-- Scene 10: Final -->
+      <section class="scene" id="final">
+        <h1 data-aos>Happy 6 Months Anniversary ❤️</h1>
+        <div class="script" data-aos>I Love You, My BOSU</div>
+        <p class="tagline" data-aos>Forever isn't enough...</p>
+        <p class="credit" data-aos>Made with Love ❤️</p>
+      </section>
     </div>
-    <p style="margin-top:18px;font-size:11px;color:var(--text-dim);letter-spacing:1px;" data-aos>tap a photo to zoom · swap in your real pictures anytime</p>
-  </section>
 
-  <!-- lightbox -->
-  <div class="lightbox" id="lightbox">
-    <div class="polaroid" id="lightboxContent"></div>
-  </div>
-
-  <!-- Scene 5: Counter -->
-  <section class="scene" id="counter">
-    <div class="eyebrow" data-aos>Every Second Counted</div>
-    <h2 class="display" data-aos style="font-size:clamp(26px,4vw,40px);">We've been together</h2>
-    <div class="counter-grid" data-aos>
-      <div class="counter-box"><div class="num" id="cMonths">0</div><div class="lbl">Months</div></div>
-      <div class="counter-box"><div class="num" id="cDays">0</div><div class="lbl">Days</div></div>
-      <div class="counter-box"><div class="num" id="cHours">0</div><div class="lbl">Hours</div></div>
-      <div class="counter-box"><div class="num" id="cMinutes">0</div><div class="lbl">Minutes</div></div>
-    </div>
-  </section>
-
-  <!-- Scene 6: Promise -->
-  <section class="scene" id="promise">
-    <div class="card" data-aos>
-      <div class="eyebrow">A Small Promise</div>
-      <p class="typed-line"><span id="typedTarget"></span></p>
-    </div>
-  </section>
-
-  <!-- Scene 7: Gift -->
-  <section class="scene" id="gift">
-    <div class="eyebrow" data-aos>One More Thing</div>
-    <div id="giftbox-wrap" data-aos>
-      <div class="gift shake" id="giftEmoji">🎁</div>
-      <div class="gift-hint">tap to open</div>
-    </div>
-  </section>
-
-  <!-- Scene 8: Letter -->
-  <section class="scene" id="letter">
-    <div class="eyebrow" data-aos>For Your Eyes Only</div>
-    <div class="envelope" id="envelope" data-aos>
-      <div class="seal">💌</div>
-    </div>
-    <div class="letter-paper" id="letterPaper">
-      Dear Love,<br><br>
-      Thank you for every smile you gave me on ordinary days.<br>
-      Thank you for every hug that made bad days smaller.<br>
-      Thank you for every moment, big or small, that turned into a memory I keep.<br><br>
-      Here's to six months, and to every month after this one.<br>
-      <span class="sign">Always yours ❤️</span>
-    </div>
-  </section>
-
-  <!-- Scene 9: Sky -->
-  <section class="scene" id="sky">
-    <div class="moon" data-aos></div>
-    <p class="script" style="font-size:28px;color:var(--accent);" data-aos>under the same sky, always</p>
-  </section>
-
-  <!-- Scene 10: Final -->
-  <section class="scene" id="final">
-    <h1 data-aos>Happy 6 Months Anniversary ❤️</h1>
-    <div class="script" data-aos>I Love You, My Bride</div>
-    <p class="tagline" data-aos>Forever isn't enough...</p>
-    <p class="credit" data-aos>Made with Love ❤️</p>
-  </section>
-
-</div>
-
-<script src="anniversary.js"></script>
-</body>
+    <script src="stars-intro.js"></script>
+    <script src="anniversary.js"></script>
+  </body>
 </html>
